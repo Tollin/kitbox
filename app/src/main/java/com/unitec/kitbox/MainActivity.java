@@ -1,6 +1,7 @@
 package com.unitec.kitbox;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -51,8 +52,10 @@ public class MainActivity extends AppCompatActivity {
         if(currentUser != null){
             loginUserDisplayName.setText(currentUser.getDisplayName());
             loginUserEmail.setText(currentUser.getEmail());
-            Log.i(TAG, currentUser.getPhotoUrl().toString());
-            loginUserProfileIcon.setImageURI(currentUser.getPhotoUrl());
+            Uri userProfile = currentUser.getPhotoUrl();
+            if(userProfile != null){
+                loginUserProfileIcon.setImageURI(currentUser.getPhotoUrl());
+            }
         }
     }
 
