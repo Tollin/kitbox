@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "236116832929",
+    "firebase_url": "https://kitbox-cbd66.firebaseio.com",
+    "project_id": "kitbox-cbd66",
+    "storage_bucket": "kitbox-cbd66.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:236116832929:android:fa28d5acdf4c879e17f6e0",
+        "android_client_info": {
+          "package_name": "com.unitec.kitbox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "236116832929-lgqoq5u2kg6ql455e30nqc6akniklt3e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.unitec.kitbox",
+            "certificate_hash": "8fd704f230c0c5c9a27b2a7c361bc2954453dc7e"
+          }
+        },
+        {
+          "client_id": "236116832929-276q6pgcsf2isip99jsscj542bofcvb3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADiSEE3ADNxdkSZkHOpYmpIh6XwEFgEYo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "236116832929-276q6pgcsf2isip99jsscj542bofcvb3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
