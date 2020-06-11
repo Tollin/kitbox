@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.unitec.kitbox.R;
 
-public class SlideshowFragment extends Fragment {
+public class CaptureFragment extends Fragment {
 
-    private SlideshowViewModel slideshowViewModel;
+    private CaptureViewModel mCaptureViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel =
-                ViewModelProviders.of(this).get(SlideshowViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
+        mCaptureViewModel =
+                ViewModelProviders.of(this).get(CaptureViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_capture, container, false);
         final TextView textView = root.findViewById(R.id.text_slideshow);
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        mCaptureViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
