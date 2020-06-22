@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.unitec.kitbox.ui.slideshow.CaptureFragment"
+        android:name="com.unitec.kitbox.ui.capture.CaptureFragment"
         android:label="@string/menu_capture"
         tools:layout="@layout/fragment_capture" />
 </navigation>
