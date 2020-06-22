@@ -11,11 +11,11 @@
     <!--    tools:context="com.amitshekhar.tflite.MainActivity"-->
 
 
-<!--    <com.camerakit.CameraKitView-->
-<!--        android:id="@+id/cameraView"-->
-<!--        android:layout_width="300dp"-->
-<!--        android:layout_height="300dp"-->
-<!--        android:layout_gravity="center|top" />-->
+    <com.camerakit.CameraKitView
+        android:id="@+id/cameraView"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center|top" />
 
 
     <LinearLayout

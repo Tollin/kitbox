@@ -23,7 +23,7 @@ public class CaptureFragment extends Fragment {
         mCaptureViewModel =
                 ViewModelProviders.of(this).get(CaptureViewModel.class);
         View root = inflater.inflate(R.layout.fragment_capture, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
+        final TextView textView = root.findViewById(R.id.textViewResult);
         mCaptureViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
