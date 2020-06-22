@@ -1,5 +1,7 @@
 package com.unitec.kitbox;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.view.Menu;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -20,6 +23,12 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.unitec.kitbox.database.User;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -31,36 +40,50 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+//    private static String TAG="MainActivity";
+
     private AppBarConfiguration mAppBarConfiguration;
     private static final int RC_SIGN_IN = 123;
     private static final String TAG = "kitbox";
-    private static FirebaseAuth firebaseAuth;
+
     private static TextView loginUserDisplayName;
     private static TextView loginUserEmail;
     private static ImageView loginUserProfileIcon;
+    private Context mContext;
+
+    // firebase database
+    private static FirebaseAuth firebaseAuth;
+    private FirebaseAuth.AuthStateListener firebaseAuthListener;
+    private static FirebaseUser currentUser;
+    private static List<AuthUI.IdpConfig> providers; // login users method
+    private static FirebaseDatabase mFirebaseDatabase;
+    private static DatabaseReference mDatabaseReference;
 
     public static FirebaseUser getCurrentUser() {
         return MainActivity.currentUser;
     }
 
     public static void setCurrentUser(FirebaseUser currentUser) {
+        Log.d(TAG, "Check if user login");
         MainActivity.currentUser = currentUser;
+        Log.d(TAG, "The current user is: "+currentUser);
         if(currentUser != null){
             loginUserDisplayName.setText(currentUser.getDisplayName());
             loginUserEmail.setText(currentUser.getEmail());
             Uri userProfile = currentUser.getPhotoUrl();
+            Log.d(TAG,"userPhotoUrl: "+userProfile);
             if(userProfile != null){
                 loginUserProfileIcon.setImageURI(currentUser.getPhotoUrl());
             }
         }
     }
 
-    private static FirebaseUser currentUser;
-    private static List<AuthUI.IdpConfig> providers;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,14 +95,15 @@ public class MainActivity extends AppCompatActivity {
         loginUserDisplayName = headerView.findViewById(R.id.login_user_displayName);
         loginUserEmail = headerView.findViewById(R.id.login_user_email);
         loginUserProfileIcon = headerView.findViewById(R.id.profileIcon);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -95,8 +119,9 @@ public class MainActivity extends AppCompatActivity {
         providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.PhoneBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build(),
-                new AuthUI.IdpConfig.FacebookBuilder().build());
+                new AuthUI.IdpConfig.GoogleBuilder().build());
+//                new AuthUI.IdpConfig.FacebookBuilder().build());
+
         setCurrentUser(firebaseAuth.getCurrentUser());
 
         fireBaseInit();
@@ -117,14 +142,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
-
+                Log.d(TAG, "Response: "+ response);
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
+                toastMessage("Successfully signed in!");
                 setCurrentUser(FirebaseAuth.getInstance().getCurrentUser());
+                    }
                 // ...
             } else {
+                toastMessage("Login fail, please login again!" );
                 startActivityForResult(
                         AuthUI.getInstance()
                                 .createSignInIntentBuilder()
@@ -133,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                         RC_SIGN_IN);
             }
         }
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -162,4 +191,13 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    /**
+     * customizable toast
+     * @param message
+     */
+    private void toastMessage(String message){
+        Toast.makeText(this,message, Toast.LENGTH_SHORT).show();
+    }
+
 }
