@@ -29,8 +29,8 @@ public class MapFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         mapViewModel =
                 ViewModelProviders.of(this).get(MapViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
+        View root = inflater.inflate(R.layout.fragment_map, container, false);
+        final TextView textView = root.findViewById(R.id.text_map);
         mapViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
@@ -39,12 +39,7 @@ public class MapFragment extends Fragment {
         });
         SupportMapFragment mapFragment =  (SupportMapFragment)getChildFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMapInstance) {
-                googleMap = googleMapInstance;
-            }
-        });
+//        mapFragment.getMapAsync(this);
         return root;
     }
 }
