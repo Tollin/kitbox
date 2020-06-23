@@ -3,6 +3,14 @@ package com.unitec.kitbox.models;
 import com.google.firebase.firestore.GeoPoint;
 
 public class SiteModel {
+    public static final String SiteNameKey = "SiteName";
+    public static final String LastUpdatorKey = "LastUpdator";
+    public static  final String SiteLocationKey = "SiteLocation";
+    public static final String CreatorKey = "Creator";
+    public static final String LocationNameKey = "LocationName";
+    public static final String ImagesKey = "Images";
+    public static final String ItemsKey = "Items";
+
     private String SiteName;
     private String LocationName;
     private String LastUpdator;

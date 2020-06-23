@@ -19,17 +19,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.unitec.kitbox.Adapter.HomeRecycleViewAdapter;
 import com.unitec.kitbox.R;
 import com.unitec.kitbox.common.CommonFragment;
+import com.unitec.kitbox.models.ShareItem;
+import com.unitec.kitbox.models.SiteModel;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 public class HomeFragment extends CommonFragment implements View.OnClickListener {
 
     private ImageButton imgBtnRefresh;
     private RecyclerView recyclerViewList;
+    private ArrayList<SiteModel> sites = null;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -41,6 +51,7 @@ public class HomeFragment extends CommonFragment implements View.OnClickListener
         // bring to top of screen
         imgBtnRefresh.bringToFront();
         imgBtnRefresh.setOnClickListener(this);
+        sites = new ArrayList();
         return root;
     }
 
@@ -57,10 +68,44 @@ public class HomeFragment extends CommonFragment implements View.OnClickListener
                    @Override
                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
                        if (task.isSuccessful()) {
+                           sites.clear();
                            for (QueryDocumentSnapshot document : task.getResult()) {
-                               Log.i(LogTag, document.get("Creator").toString());
-                               
+                               Log.i(LogTag, document.getString(SiteModel.CreatorKey));
+                                SiteModel site = new SiteModel();
+                                site.setCreator(document.getString(SiteModel.CreatorKey));
+                                site.setLastUpdator(document.getString(SiteModel.LastUpdatorKey));
+                               site.setLocationName(document.getString(SiteModel.LocationNameKey));
+                               site.setSiteName(document.getString(SiteModel.SiteNameKey));
+                               site.setSiteLocation(document.getGeoPoint(SiteModel.SiteLocationKey));
+                               ArrayList<String> images =  (ArrayList<String>) document.get(SiteModel.ImagesKey);
+                               if(images!=null){
+                                   String[] imageUrls = new String[images.size()];
+                                   site.setImages(imageUrls);
+                                   int index =0;
+                                for (String imageUrl: images){
+                                    imageUrls[index] = imageUrl;
+                                    index++;
+                                }
+                               }
+                               ArrayList<HashMap> sharedItems = (ArrayList<HashMap>) document.get(SiteModel.ItemsKey);
+                               if(sharedItems != null){
+                                   ShareItem[] items = new ShareItem[sharedItems.size()];
+                                   site.setItems(items);
+                                   int index = 0;
+                                   for (HashMap<String, Object> sharedItem: sharedItems){
+                                       ShareItem item = new ShareItem();
+                                       item.setCount(Integer.parseInt(sharedItem.get("Count").toString()));
+                                       item.setName(sharedItem.get("Name").toString());
+                                       item.setExpireDate(((Timestamp)sharedItem.get("ExpireDate")).toDate());
+                                       items[index] = item;
+                                       index++;
+                                   }
+                               }
+                               sites.add(site);
                            }
+
+                           HomeRecycleViewAdapter adapter = new HomeRecycleViewAdapter(sites);
+                           recyclerViewList.setAdapter(adapter);
                        } else {
                            Toast.makeText(getContext(), "faild to load data from server", Toast.LENGTH_LONG)
                                    .show();
