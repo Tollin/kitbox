@@ -151,7 +151,7 @@ public class CaptureFragment extends Fragment {
                             INPUT_SIZE,
                             QUANT);
                 } catch (final Exception e) {
-                    throw new RuntimeException("Error initializing TensorFlow!", e);
+                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
