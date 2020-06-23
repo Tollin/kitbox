@@ -20,7 +20,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 
-public class TensorflowLiteClass implements Classifier{
+public class TensorFlowImageClassifier implements Classifier {
 
 	private static final int MAX_RESULTS = 3;
 	private static final int BATCH_SIZE = 1;
@@ -35,17 +35,17 @@ public class TensorflowLiteClass implements Classifier{
 	private List<String> labelList;
 	private boolean quant;
 
-	private TensorflowLiteClass() {
+	private TensorFlowImageClassifier() {
 
 	}
 
-	static Classifier create(AssetManager assetManager,
+	public static Classifier create(AssetManager assetManager,
 							 String modelPath,
 							 String labelPath,
 							 int inputSize,
 							 boolean quant) throws IOException {
 
-		TensorflowLiteClass classifier = new TensorflowLiteClass();
+		TensorFlowImageClassifier classifier = new TensorFlowImageClassifier();
 		classifier.interpreter = new Interpreter(classifier.loadModelFile(assetManager, modelPath), new Interpreter.Options());
 		classifier.labelList = classifier.loadLabelList(assetManager, labelPath);
 		classifier.inputSize = inputSize;
@@ -53,7 +53,6 @@ public class TensorflowLiteClass implements Classifier{
 
 		return classifier;
 	}
-
 
 	@Override
 	public List<Recognition> recognizeImage(Bitmap bitmap) {
@@ -67,6 +66,7 @@ public class TensorflowLiteClass implements Classifier{
 			interpreter.run(byteBuffer, result);
 			return getSortedResultFloat(result);
 		}
+
 	}
 
 	@Override

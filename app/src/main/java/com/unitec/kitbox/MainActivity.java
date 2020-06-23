@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             Uri userProfile = currentUser.getPhotoUrl();
             Log.d(TAG,"userPhotoUrl: "+userProfile);
             if(userProfile != null){
-                loginUserProfileIcon.setImageURI(currentUser.getPhotoUrl());
+                loginUserProfileIcon.setImageURI(userProfile);
             }
         }
     }

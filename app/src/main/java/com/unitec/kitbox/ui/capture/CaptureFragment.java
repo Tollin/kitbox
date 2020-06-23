@@ -1,5 +1,6 @@
 package com.unitec.kitbox.ui.capture;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
@@ -8,25 +9,30 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
-import com.camerakit.CameraKitView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import com.unitec.kitbox.R;
 import com.unitec.kitbox.tensorflowlite.Classifier;
+import com.unitec.kitbox.tensorflowlite.TensorFlowImageClassifier;
+import com.wonderkiln.camerakit.CameraKitError;
+import com.wonderkiln.camerakit.CameraKitEvent;
+import com.wonderkiln.camerakit.CameraKitEventListener;
+import com.wonderkiln.camerakit.CameraKitImage;
+import com.wonderkiln.camerakit.CameraKitVideo;
+import com.wonderkiln.camerakit.CameraView;
 
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class CaptureFragment extends Fragment {
+
+    private static String TAG = "CaptureFragment";
 
     private CaptureViewModel mCaptureViewModel;
 
@@ -41,13 +47,13 @@ public class CaptureFragment extends Fragment {
     private TextView textViewResult;
     private Button btnDetectObject, btnToggleCamera;
     private ImageView imageViewResult;
-    private CameraKitView cameraView;
+    private CameraView cameraView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_capture, container, false);
 
-//        cameraView = root.findViewById(R.id.cameraView);
+        cameraView = root.findViewById(R.id.cameraView);
         imageViewResult = root.findViewById(R.id.imageViewResult);
         textViewResult = root.findViewById(R.id.textViewResult);
         textViewResult.setMovementMethod(new ScrollingMovementMethod());
@@ -55,23 +61,100 @@ public class CaptureFragment extends Fragment {
         btnToggleCamera = root.findViewById(R.id.btnToggleCamera);
         btnDetectObject = root.findViewById(R.id.btnDetectObject);
 
+        cameraView.addCameraKitListener(new CameraKitEventListener() {
+            @Override
+            public void onEvent(CameraKitEvent cameraKitEvent) {
+
+            }
+
+            @Override
+            public void onError(CameraKitError cameraKitError) {
+
+            }
+
+            @Override
+            public void onImage(CameraKitImage cameraKitImage) {
+
+                Bitmap bitmap = cameraKitImage.getBitmap();
+
+                bitmap = Bitmap.createScaledBitmap(bitmap, INPUT_SIZE, INPUT_SIZE, false);
+
+                imageViewResult.setImageBitmap(bitmap);
+
+                final List<Classifier.Recognition> results = classifier.recognizeImage(bitmap);
+
+                textViewResult.setText(results.toString());
+
+            }
+
+            @Override
+            public void onVideo(CameraKitVideo cameraKitVideo) {
+
+            }
+        });
+
+        btnToggleCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraView.toggleFacing();
+            }
+        });
+
+        btnDetectObject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    cameraView.captureImage();
+                }catch (Exception ex){
+                    Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        initTensorFlowAndLoadModel();
+
         return root;
     }
-//        mCaptureViewModel =
-//                ViewModelProviders.of(this).get(CaptureViewModel.class);
-//
-//        View root = inflater.inflate(R.layout.fragment_capture, container, false);
-//
-//        final TextView textView = root.findViewById(R.id.text_capture);
-//
-//        mCaptureViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
-//        return root;
-//    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        cameraView.start();
+    }
+
+    @Override
+    public void onPause() {
+        cameraView.stop();
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                classifier.close();
+            }
+        });
+    }
+
+    private void initTensorFlowAndLoadModel() {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    classifier = TensorFlowImageClassifier.create(
+                            getActivity().getAssets(),
+                            MODEL_PATH,
+                            LABEL_PATH,
+                            INPUT_SIZE,
+                            QUANT);
+                } catch (final Exception e) {
+                    throw new RuntimeException("Error initializing TensorFlow!", e);
+                }
+            }
+        });
+    }
 
 }
