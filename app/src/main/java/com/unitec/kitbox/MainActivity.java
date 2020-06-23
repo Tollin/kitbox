@@ -22,6 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -46,21 +48,16 @@ public class MainActivity extends AppCompatActivity {
     private static ImageView loginUserProfileIcon;
     private static final String CollectionName = "Sites";
 
-    public DatabaseReference getSitesCollection() {
-        return SitesCollection;
+    public CollectionReference getSitesCollection() {
+        return sitesCollection;
     }
 
-    private DatabaseReference SitesCollection;
-
-    /**
-     * Global use to get the database instance
-     * @return
-     */
-    public FirebaseDatabase getFirebaseDatabase() {
-        return firebaseDatabase;
+    private CollectionReference sitesCollection = null;
+    public FirebaseFirestore getFirebaseFirestore() {
+        return firebaseFirestore;
     }
 
-    private FirebaseDatabase firebaseDatabase;
+    private FirebaseFirestore firebaseFirestore;
 
     public static FirebaseUser getCurrentUser() {
         return MainActivity.currentUser;
@@ -91,14 +88,14 @@ public class MainActivity extends AppCompatActivity {
         loginUserDisplayName = headerView.findViewById(R.id.login_user_displayName);
         loginUserEmail = headerView.findViewById(R.id.login_user_email);
         loginUserProfileIcon = headerView.findViewById(R.id.profileIcon);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -111,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        SitesCollection = firebaseDatabase.getReference(CollectionName);
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        sitesCollection = firebaseFirestore.collection(CollectionName);
         providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.PhoneBuilder().build(),
