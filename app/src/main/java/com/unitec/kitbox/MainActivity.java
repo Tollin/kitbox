@@ -20,6 +20,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -42,6 +44,23 @@ public class MainActivity extends AppCompatActivity {
     private static TextView loginUserDisplayName;
     private static TextView loginUserEmail;
     private static ImageView loginUserProfileIcon;
+    private static final String CollectionName = "Sites";
+
+    public DatabaseReference getSitesCollection() {
+        return SitesCollection;
+    }
+
+    private DatabaseReference SitesCollection;
+
+    /**
+     * Global use to get the database instance
+     * @return
+     */
+    public FirebaseDatabase getFirebaseDatabase() {
+        return firebaseDatabase;
+    }
+
+    private FirebaseDatabase firebaseDatabase;
 
     public static FirebaseUser getCurrentUser() {
         return MainActivity.currentUser;
@@ -92,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        SitesCollection = firebaseDatabase.getReference(CollectionName);
         providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.PhoneBuilder().build(),
