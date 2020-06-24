@@ -21,8 +21,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- Specified an older version of the Google Play Services SDK, you must require
     android.permission.WRITE_EXTERNAL_STORAGE permission.   -->
-
-
+    
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/kitbox"
@@ -34,6 +37,12 @@
             tools:replace="android:value"
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_application_id"/>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyCYntFydyXMfQPsRYOu86DcV7qQvjG_2V4"/>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
