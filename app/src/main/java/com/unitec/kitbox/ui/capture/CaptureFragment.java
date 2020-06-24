@@ -44,6 +44,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -114,6 +115,7 @@ public class CaptureFragment extends Fragment {
     private LocationManager mLocationManager;
     private LocationListener mLocationListener;
     private LatLng mLatLng;
+    GeoPoint mGeoPoint;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Boolean mLocationPermissionGranted = false;
     private static final String fineLocationPermission = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -384,6 +386,10 @@ public class CaptureFragment extends Fragment {
                 textViewLatitude.setText(String.valueOf(location.getLatitude()));
                 mLatLng = new LatLng(location.getLatitude(),location.getLongitude());
                 Log.d(TAG, "get location");
+                int lat = (int) (location.getLatitude()*1E6);
+                int lng = (int) (location.getLongitude() * 1E6);
+                mGeoPoint = new GeoPoint(lat,lng);
+                Log.d(TAG, mGeoPoint.toString());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -447,7 +453,7 @@ public class CaptureFragment extends Fragment {
     private void uploadData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Log.d(TAG, objectPicUrl);
-
+        Log.d(TAG, mGeoPoint.toString());
         Date date = null;
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         try {
@@ -472,7 +478,7 @@ public class CaptureFragment extends Fragment {
         SiteModel site = new SiteModel();
         site.setCreator(currentUser.getDisplayName());
         ArrayList images = new ArrayList<String>();
-        images.add(objectPicUrl.toString());
+        images.add(objectPicUrl);
         site.setImages(images);
         ShareItem item = new ShareItem();
         item.setName(textViewObject.getText().toString());
@@ -480,7 +486,7 @@ public class CaptureFragment extends Fragment {
         ExpireDate = new Timestamp(date);
         item.setExpireDate(ExpireDate);
         site.setLastUpdator(currentUser.getDisplayName());
-//        site.getSiteLocation(Double.parseDouble(getL));
+        site.setSiteLocation(mGeoPoint);
         site.setSiteName(textViewSiteName.getText().toString());
         ArrayList<ShareItem> shareItems = new ArrayList<>();
         shareItems.add(item);
