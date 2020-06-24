@@ -2,22 +2,24 @@ package com.unitec.kitbox.models;
 
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.ArrayList;
+
 public class SiteModel {
-    public static final String SiteNameKey = "SiteName";
-    public static final String LastUpdatorKey = "LastUpdator";
-    public static  final String SiteLocationKey = "SiteLocation";
-    public static final String CreatorKey = "Creator";
-    public static final String LocationNameKey = "LocationName";
-    public static final String ImagesKey = "Images";
-    public static final String ItemsKey = "Items";
+    public static final String SiteNameKey = "siteName";
+    public static final String LastUpdatorKey = "lastUpdator";
+    public static  final String SiteLocationKey = "siteLocation";
+    public static final String CreatorKey = "creator";
+    public static final String LocationNameKey = "locationName";
+    public static final String ImagesKey = "images";
+    public static final String ItemsKey = "items";
 
     private String SiteName;
     private String LocationName;
     private String LastUpdator;
     private String Creator;
     private GeoPoint SiteLocation;
-    private String[] Images;
-    private ShareItem[] Items;
+    private ArrayList<String> Images;
+    private ArrayList<ShareItem> Items;
 
     public String getSiteName() {
         return SiteName;
@@ -59,19 +61,19 @@ public class SiteModel {
         SiteLocation = siteLocation;
     }
 
-    public String[] getImages() {
+    public ArrayList<String> getImages() {
         return Images;
     }
 
-    public void setImages(String[] images) {
+    public void setImages(ArrayList<String> images) {
         Images = images;
     }
 
-    public ShareItem[] getItems() {
+    public ArrayList<ShareItem> getItems() {
         return Items;
     }
 
-    public void setItems(ShareItem[] items) {
+    public void setItems(ArrayList<ShareItem> items) {
         Items = items;
     }
 }

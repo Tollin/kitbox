@@ -47,6 +47,7 @@ public class HomeFragment extends CommonFragment implements View.OnClickListener
         imgBtnRefresh = root.findViewById(R.id.imgBtn_Refresh);
         recyclerViewList = root.findViewById(R.id.home_recycleview);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
+
         recyclerViewList.setLayoutManager(llm);
         // bring to top of screen
         imgBtnRefresh.bringToFront();
@@ -79,26 +80,22 @@ public class HomeFragment extends CommonFragment implements View.OnClickListener
                                site.setSiteLocation(document.getGeoPoint(SiteModel.SiteLocationKey));
                                ArrayList<String> images =  (ArrayList<String>) document.get(SiteModel.ImagesKey);
                                if(images!=null){
-                                   String[] imageUrls = new String[images.size()];
+                                   ArrayList<String> imageUrls = new ArrayList<String>();
                                    site.setImages(imageUrls);
-                                   int index =0;
                                 for (String imageUrl: images){
-                                    imageUrls[index] = imageUrl;
-                                    index++;
+                                    imageUrls.add(imageUrl);
                                 }
                                }
                                ArrayList<HashMap> sharedItems = (ArrayList<HashMap>) document.get(SiteModel.ItemsKey);
                                if(sharedItems != null){
-                                   ShareItem[] items = new ShareItem[sharedItems.size()];
+                                   ArrayList<ShareItem> items = new ArrayList<ShareItem>();
                                    site.setItems(items);
-                                   int index = 0;
                                    for (HashMap<String, Object> sharedItem: sharedItems){
                                        ShareItem item = new ShareItem();
-                                       item.setCount(Integer.parseInt(sharedItem.get("Count").toString()));
-                                       item.setName(sharedItem.get("Name").toString());
-                                       item.setExpireDate(((Timestamp)sharedItem.get("ExpireDate")).toDate());
-                                       items[index] = item;
-                                       index++;
+                                       item.setCount(Integer.parseInt(sharedItem.get(ShareItem.CountKey).toString()));
+                                       item.setName(sharedItem.get(ShareItem.NameKey).toString());
+                                       item.setExpireDate(((Timestamp)sharedItem.get(ShareItem.ExpireDateKey)).toDate());
+                                       items.add(item);
                                    }
                                }
                                sites.add(site);

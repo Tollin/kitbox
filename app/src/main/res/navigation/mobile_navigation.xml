@@ -30,11 +30,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.unitec.kitbox.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-    <fragment
         android:id="@+id/nav_map"
         android:name="com.unitec.kitbox.ui.map.MapFragment"
         android:label="@string/menu_map"

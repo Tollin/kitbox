@@ -3,6 +3,10 @@ package com.unitec.kitbox.models;
 import java.util.Date;
 
 public class ShareItem {
+    public final static String CountKey = "count";
+    public final static String ExpireDateKey = "expireDate";
+    public final static String NameKey = "name";
+
     private int Count;
 
     public int getCount() {

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 import com.unitec.kitbox.R;
+import com.unitec.kitbox.models.ShareItem;
 import com.unitec.kitbox.models.SiteModel;
 
 import java.util.ArrayList;
@@ -30,9 +31,11 @@ public class HomeRecycleViewAdapter  extends RecyclerView.Adapter<CardViewAdapte
     @Override
     public void onBindViewHolder(@NonNull CardViewAdapter holder, int position) {
         SiteModel model = modelData.get(position);
-        holder.getTvItemName().setText(model.getItems());
-        Picasso.get().load(model.getImages()[0]).into(holder.getImgBackground());
-        holder.getTvCreator().setText(model.getCreator());
+        ShareItem item = model.getItems().get(0);
+        holder.getTvItemName().setText(item.getName() + ":" + item.getCount());
+        Picasso.get().load(model.getImages().get(0)).into(holder.getImgBackground());
+        holder.getTvCreator().setText(model.getLastUpdator());
+        holder.getTvSiteName().setText(model.getSiteName());
     }
 
     @Override
