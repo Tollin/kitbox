@@ -386,7 +386,7 @@ public class CaptureFragment extends Fragment {
                 textViewLatitude.setText(String.valueOf(location.getLatitude()));
                 mLatLng = new LatLng(location.getLatitude(),location.getLongitude());
                 Log.d(TAG, "get location "+location.getLongitude()+" "+location.getLatitude());
-                mGeoPoint = new GeoPoint(location.getLongitude(),location.getLatitude());
+                mGeoPoint = new GeoPoint(location.getLatitude(),location.getLongitude());
                 Log.d(TAG, mGeoPoint.toString());
             } catch (Exception e) {
                 e.printStackTrace();
