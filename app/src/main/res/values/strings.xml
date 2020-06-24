@@ -18,4 +18,5 @@
     <string name="fb_login_protocol_scheme">fb244967606729518</string>
     <string name="logout">Logout</string>
     <string name="refreshData">refresh data from server</string>
+    <string name="sitepicture">Site Picture</string>
 </resources>

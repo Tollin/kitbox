@@ -10,38 +10,49 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.unitec.kitbox.R;
 
 public class CardViewAdapter extends RecyclerView.ViewHolder{
-    private TextView dateInfo;
-    private ImageView picInfo;
+    private TextView tvSiteName;
+    private ImageView imgBackground;
+    private TextView tvItemName;
+    private TextView tvCreator;
 
-    public TextView getDateInfo() {
-        return dateInfo;
+    public TextView getTvCreator() {
+        return tvCreator;
     }
 
-    public void setDateInfo(TextView dateInfo) {
-        this.dateInfo = dateInfo;
+    public void setTvCreator(TextView tvCreator) {
+        this.tvCreator = tvCreator;
     }
 
-    public ImageView getPicInfo() {
-        return picInfo;
+    public TextView getTvSiteName() {
+        return tvSiteName;
     }
 
-    public void setPicInfo(ImageView picInfo) {
-        this.picInfo = picInfo;
+    public void setTvSiteName(TextView tvSiteName) {
+        this.tvSiteName = tvSiteName;
     }
 
-    public TextView getDesInfo() {
-        return DesInfo;
+    public ImageView getImgBackground() {
+        return imgBackground;
     }
 
-    public void setDesInfo(TextView desInfo) {
-        DesInfo = desInfo;
+    public void setImgBackground(ImageView imgBackground) {
+        this.imgBackground = imgBackground;
     }
 
-    private TextView DesInfo;
+    public TextView getTvItemName() {
+        return tvItemName;
+    }
+
+    public void setTvItemName(TextView tvItemName) {
+        this.tvItemName = tvItemName;
+    }
+
+
     public CardViewAdapter(@NonNull View itemView) {
         super(itemView);
-        dateInfo = itemView.findViewById(R.id.date_bill);
-        picInfo = itemView.findViewById(R.id.pic_address);
-        DesInfo = itemView.findViewById(R.id.des_bill);
+        tvCreator = itemView.findViewById(R.id.tv_creator);
+        imgBackground = itemView.findViewById(R.id.img_background);
+        tvItemName = itemView.findViewById(R.id.tv_itemname);
+        tvSiteName = itemView.findViewById(R.id.tv_sitename);
     }
 }

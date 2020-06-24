@@ -47,6 +47,7 @@ public class HomeFragment extends CommonFragment implements View.OnClickListener
         imgBtnRefresh = root.findViewById(R.id.imgBtn_Refresh);
         recyclerViewList = root.findViewById(R.id.home_recycleview);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
+
         recyclerViewList.setLayoutManager(llm);
         // bring to top of screen
         imgBtnRefresh.bringToFront();
@@ -91,9 +92,9 @@ public class HomeFragment extends CommonFragment implements View.OnClickListener
                                    site.setItems(items);
                                    for (HashMap<String, Object> sharedItem: sharedItems){
                                        ShareItem item = new ShareItem();
-                                       item.setCount(Integer.parseInt(sharedItem.get("Count").toString()));
-                                       item.setName(sharedItem.get("Name").toString());
-                                       item.setExpireDate(((Timestamp)sharedItem.get("ExpireDate")));
+                                       item.setCount(Integer.parseInt(sharedItem.get(ShareItem.CountKey).toString()));
+                                       item.setName(sharedItem.get(ShareItem.NameKey).toString());
+                                       item.setExpireDate(((Timestamp)sharedItem.get(ShareItem.ExpireDateKey)));
                                        items.add(item);
                                    }
                                }
