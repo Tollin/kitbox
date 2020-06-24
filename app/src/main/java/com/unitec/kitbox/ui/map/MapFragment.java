@@ -209,7 +209,7 @@ public class MapFragment extends Fragment implements
         mMap.setOnMarkerClickListener(this);
         mapready = true;
         googleMap = mMap;
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(1000), 1000, null);
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(11));
         draw();
     }
 
