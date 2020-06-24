@@ -32,7 +32,7 @@ public class HomeRecycleViewAdapter  extends RecyclerView.Adapter<CardViewAdapte
     public void onBindViewHolder(@NonNull CardViewAdapter holder, int position) {
         SiteModel model = modelData.get(position);
         holder.getDesInfo().setText(model.getSiteName());
-        Picasso.get().load(model.getImages()[0]).into(holder.getPicInfo());
+        Picasso.get().load(model.getImages().get(0)).into(holder.getPicInfo());
 //        holder.personAge.setText(persons.get(i).age);
 //        holder.personPhoto.setImageResource(persons.get(i).photoId);
     }
