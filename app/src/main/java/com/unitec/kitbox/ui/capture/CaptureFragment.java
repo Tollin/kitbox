@@ -470,13 +470,16 @@ public class CaptureFragment extends Fragment {
 ////        user.put("SiteLocation", textViewLatitude.getText().toString()+","+textViewLongitude.getText().toString());
 //        user.put("SiteName", textViewSiteName.getText().toString());
         SiteModel site = new SiteModel();
-        site.setSiteName(textViewSiteName.getText().toString());
-//        site.getImages(objectPicUrl.toString());
+        site.setCreator(currentUser.getDisplayName());
+//        site.setImages(objectPicUrl.toString());
         ShareItem item = new ShareItem();
         item.setName(textViewObject.getText().toString());
         item.setCount(Integer.valueOf(textViewObjectCount.getText().toString()));
         ExpireDate = new Timestamp(date);
         item.setExpireDate(ExpireDate);
+        site.setLastUpdator(currentUser.getDisplayName());
+//        site.getSiteLocation(Double.parseDouble(getL));
+        site.setSiteName(textViewSiteName.getText().toString());
         ArrayList<ShareItem> shareItems = new ArrayList<>();
         shareItems.add(item);
         site.setItems(shareItems);
