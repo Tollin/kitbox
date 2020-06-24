@@ -49,6 +49,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.unitec.kitbox.MainActivity;
 import com.unitec.kitbox.R;
+import com.unitec.kitbox.models.ShareItem;
+import com.unitec.kitbox.models.SiteModel;
 import com.unitec.kitbox.tensorflowlite.Classifier;
 import com.unitec.kitbox.tensorflowlite.TensorFlowImageClassifier;
 import com.wonderkiln.camerakit.CameraKitError;
@@ -437,22 +439,30 @@ public class CaptureFragment extends Fragment {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 //        Log.d(TAG, objectPicUrl);
         // Create a new user with a first and last name
-        Map<String, Object> user = new HashMap<>();
-          user.put("Test", "test");
-//          user.put("Test1", "test1");
-        user.put("Creator", currentUser.getDisplayName());
-//        user.put("Images", objectPicUrl);
-        user.put("Count", textViewObjectCount.getText());
-        user.put("ExpireDate", textViewExpiredDate.getText());
-        user.put("Name", textViewObject.getText().toString());
-        user.put("LastUpdator", currentUser.getDisplayName());
-        user.put("LocationName", textViewSiteName.getText().toString());
-//        user.put("SiteLocation", textViewLatitude.getText().toString()+","+textViewLongitude.getText().toString());
-        user.put("SiteName", textViewSiteName.getText().toString());
+//        Map<String, Object> user = new HashMap<>();
+//          user.put("Test", "test");
+////          user.put("Test1", "test1");
+//        user.put("Creator", currentUser.getDisplayName());
+////        user.put("Images", objectPicUrl);
+//        user.put("Count", textViewObjectCount.getText());
+//        user.put("ExpireDate", textViewExpiredDate.getText());
+//        user.put("Name", textViewObject.getText().toString());
+//        user.put("LastUpdator", currentUser.getDisplayName());
+//        user.put("LocationName", textViewSiteName.getText().toString());
+////        user.put("SiteLocation", textViewLatitude.getText().toString()+","+textViewLongitude.getText().toString());
+//        user.put("SiteName", textViewSiteName.getText().toString());
+        SiteModel site = new SiteModel();
+        site.setSiteName(textViewSiteName.getText().toString());
+        ShareItem item = new ShareItem();
+        item.setName(textViewObject.getText().toString());
+        item.setCount(Integer.parseInt(textViewObjectCount.getText().toString()));
+        ShareItem[] shareItems = new ShareItem[1];
+        shareItems[0] = item;
+        site.setItems(shareItems);
 
         // Add a new document with a generated ID
         db.collection("users")
-                .add(user)
+                .add(site)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
