@@ -121,24 +121,24 @@ public class MapFragment extends Fragment implements
                             dbready = true;
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 List<Item> items = new ArrayList<Item>();
-                                List<HashMap<String, Object>> lhm = (List<HashMap<String, Object>> )document.getData().get("Items");
+                                List<HashMap<String, Object>> lhm = (List<HashMap<String, Object>> )document.getData().get("items");
                                 for(HashMap<String, Object> hm : lhm){
                                     items.add(new Item(hm));
                                 }
                                 List<String> images = new ArrayList<String>();
-                                List<String> is = (ArrayList<String>)document.getData().get("Images");
+                                List<String> is = (ArrayList<String>)document.getData().get("images");
                                 for(String s : is){
                                     images.add(s);
                                 }
 //                                Log.d(TAG, document.getId() + " lhm=> " + items.get(0).getName());
                                 MapItem mi = new MapItem((String)document.getId(),
-                                        (String)document.getData().get("SiteName"),
+                                        (String)document.getData().get("siteName"),
                                         images,
-                                        (String)document.getData().get("LastUpdator"),
+                                        (String)document.getData().get("lastUpdator"),
                                         items,
-                                        (String)document.getData().get("Creator"),
-                                        (GeoPoint)document.getData().get("SiteLocation"),
-                                        (String)document.getData().get("LocationName"));
+                                        (String)document.getData().get("creator"),
+                                        (GeoPoint)document.getData().get("siteLocation"),
+                                        (String)document.getData().get("locationName"));
                                 lmi.add(mi);
 //                                Log.d(TAG, document.getId() + " values=> " + document.getData().values());
 //                                Log.d(TAG, document.getId() + " keys=> " + document.getData().keySet());
@@ -181,7 +181,7 @@ public class MapFragment extends Fragment implements
         mMap.setOnMarkerClickListener(this);
         mapready = true;
         googleMap = mMap;
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(20000), 1000, null);
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(1000), 1000, null);
         draw();
     }
 
