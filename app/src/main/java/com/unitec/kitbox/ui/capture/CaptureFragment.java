@@ -385,10 +385,8 @@ public class CaptureFragment extends Fragment {
                 textViewLongitude.setText(String.valueOf(location.getLongitude()));
                 textViewLatitude.setText(String.valueOf(location.getLatitude()));
                 mLatLng = new LatLng(location.getLatitude(),location.getLongitude());
-                Log.d(TAG, "get location");
-                int lat = (int) (location.getLatitude()*1E6);
-                int lng = (int) (location.getLongitude() * 1E6);
-                mGeoPoint = new GeoPoint(lat,lng);
+                Log.d(TAG, "get location "+location.getLongitude()+" "+location.getLatitude());
+                mGeoPoint = new GeoPoint(location.getLongitude(),location.getLatitude());
                 Log.d(TAG, mGeoPoint.toString());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -453,7 +451,9 @@ public class CaptureFragment extends Fragment {
     private void uploadData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Log.d(TAG, objectPicUrl);
-        Log.d(TAG, mGeoPoint.toString());
+        if (mGeoPoint != null){
+            Log.d(TAG, mGeoPoint.toString());
+        }
         Date date = null;
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         try {
