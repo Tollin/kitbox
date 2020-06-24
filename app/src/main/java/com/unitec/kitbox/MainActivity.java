@@ -26,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.google.firebase.firestore.CollectionReference;
+import com.squareup.picasso.Picasso;
+
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -84,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             Uri userProfile = currentUser.getPhotoUrl();
             Log.d(TAG,"userPhotoUrl: "+userProfile);
             if(userProfile != null){
-                loginUserProfileIcon.setImageURI(userProfile);
+                Picasso.get().load(userProfile).into(loginUserProfileIcon);
             }
         }
     }
@@ -101,14 +103,6 @@ public class MainActivity extends AppCompatActivity {
         loginUserDisplayName = headerView.findViewById(R.id.login_user_displayName);
         loginUserEmail = headerView.findViewById(R.id.login_user_email);
         loginUserProfileIcon = headerView.findViewById(R.id.profileIcon);
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
