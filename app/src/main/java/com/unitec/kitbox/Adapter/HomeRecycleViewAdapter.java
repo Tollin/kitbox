@@ -1,6 +1,5 @@
 package com.unitec.kitbox.Adapter;
 
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +30,9 @@ public class HomeRecycleViewAdapter  extends RecyclerView.Adapter<CardViewAdapte
     @Override
     public void onBindViewHolder(@NonNull CardViewAdapter holder, int position) {
         SiteModel model = modelData.get(position);
-        holder.getDesInfo().setText(model.getSiteName());
-        Picasso.get().load(model.getImages()[0]).into(holder.getPicInfo());
-//        holder.personAge.setText(persons.get(i).age);
-//        holder.personPhoto.setImageResource(persons.get(i).photoId);
+        holder.getTvItemName().setText(model.getItems());
+        Picasso.get().load(model.getImages()[0]).into(holder.getImgBackground());
+        holder.getTvCreator().setText(model.getCreator());
     }
 
     @Override
