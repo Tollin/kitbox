@@ -13,22 +13,15 @@ import android.widget.TextView;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
-import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+
+import com.google.firebase.firestore.CollectionReference;
+
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -53,6 +46,18 @@ public class MainActivity extends AppCompatActivity {
     private static TextView loginUserDisplayName;
     private static TextView loginUserEmail;
     private static ImageView loginUserProfileIcon;
+    private static final String CollectionName = "Sites";
+
+    public CollectionReference getSitesCollection() {
+        return sitesCollection;
+    }
+
+    private CollectionReference sitesCollection = null;
+    public FirebaseFirestore getFirebaseFirestore() {
+        return firebaseFirestore;
+    }
+
+    private FirebaseFirestore firebaseFirestore;
 
     public static FirebaseUser getCurrentUser() {
         return MainActivity.currentUser;
@@ -83,14 +88,14 @@ public class MainActivity extends AppCompatActivity {
         loginUserDisplayName = headerView.findViewById(R.id.login_user_displayName);
         loginUserEmail = headerView.findViewById(R.id.login_user_email);
         loginUserProfileIcon = headerView.findViewById(R.id.profileIcon);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -103,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        sitesCollection = firebaseFirestore.collection(CollectionName);
         providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.PhoneBuilder().build(),
