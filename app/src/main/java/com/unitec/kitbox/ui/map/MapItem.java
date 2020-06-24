@@ -64,6 +64,15 @@ public class MapItem {
         LocationName = locationName;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private String id;
     private String SiteName;
     private List<String> Images;
     private String LastUpdator;
@@ -72,13 +81,14 @@ public class MapItem {
     private GeoPoint SiteLocation;
     private String LocationName;
 
-    public MapItem(String SiteName ,
+    public MapItem(String id, String SiteName ,
                    List<String> Images ,
                    String LastUpdator ,
                    List<Item> Items ,
                    String Creator ,
                    GeoPoint SiteLocation ,
                    String LocationName ) {
+        this.id = id;
         this.Images = new ArrayList<String>();
         for (String s : Images) {
             this.Images.add(s);

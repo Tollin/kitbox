@@ -29,6 +29,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 import com.unitec.kitbox.R;
 
 import java.io.IOException;
@@ -51,18 +52,23 @@ public class MapFragment extends Fragment implements
     private double lat;
     private double lon;
     private  SupportMapFragment mapFragment;
-    private TextView textView;
-    private ImageView imageView;
+    private TextView closeBtn;
+    private show sh;
+//    private TextView textView;
+//    private ImageView imageView;
     private String imageUrl;
     public void draw () {
         if(dbready && mapready) {
             for (MapItem mi : lmi) {
-                Log.d(TAG,  " MapItem=> " + mi.getImages());
-                Log.d(TAG,  " MapItem=> " + mi.getItems().get(0).getName());
-                Log.d(TAG,  " MapItem=> " + mi.getImages().get(0));
-                LatLng myplce = new LatLng(1, 1);
+                GeoPoint gp = mi.getSiteLocation();
+                Log.d(TAG,  " MapItem=> " + mi.getId());
+                Log.d(TAG,  " MapItem=> " + gp.getLatitude());
+                Log.d(TAG,  " MapItem=> " + gp.getLongitude());
+                LatLng myplce = new LatLng(gp.getLatitude(), gp.getLongitude());
                 Marker a = googleMap.addMarker(new MarkerOptions().position(myplce).title(mi.getSiteName()));
-                a.setTag(0);
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(myplce));
+                a.setTag(mi.getId());
+
             }
 
 
@@ -77,13 +83,21 @@ public class MapFragment extends Fragment implements
         mapViewModel =
                 ViewModelProviders.of(this).get(MapViewModel.class);
         View root = inflater.inflate(R.layout.fragment_map, container, false);
-        textView = root.findViewById(R.id.text_map);
-        imageView = root.findViewById(R.id.imageView);
-        textView.setVisibility(View.GONE);
+//        textView = root.findViewById(R.id.text_map);
+//        imageView = root.findViewById(R.id.imageView);
+        sh = root.findViewById(R.id.show0);
+        closeBtn = sh.getT0();
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sh.setVisibility(View.GONE);
+            }
+        });
+//        textView.setVisibility(View.GONE);
         mapViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                textView.setText(s);
+//                textView.setText(s);
             }
         });
         mapFragment =  (SupportMapFragment)getChildFragmentManager()
@@ -117,7 +131,8 @@ public class MapFragment extends Fragment implements
                                     images.add(s);
                                 }
 //                                Log.d(TAG, document.getId() + " lhm=> " + items.get(0).getName());
-                                MapItem mi = new MapItem((String)document.getData().get("SiteName"),
+                                MapItem mi = new MapItem((String)document.getId(),
+                                        (String)document.getData().get("SiteName"),
                                         images,
                                         (String)document.getData().get("LastUpdator"),
                                         items,
@@ -143,20 +158,18 @@ public class MapFragment extends Fragment implements
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Integer clickCount = (Integer) marker.getTag();
-        Log.d(TAG, "clickCount "+ clickCount+" "+
-                marker.getTitle());
-        // Check if a click count was set, then display the click count.
-        if(clickCount % 2 == 0 ) {
-            textView.setVisibility(View.VISIBLE);
-        } else {
-            textView.setVisibility(View.GONE);
-        }
-        textView.setText(marker.getTitle());
-        if (clickCount != null) {
-            clickCount = clickCount + 1;
-            marker.setTag(clickCount);
-
+////        Integer clickCount = (Integer) marker.getTag();
+//        Log.d(TAG, "clickCount "+ clickCount+" "+
+//                marker.getTitle());
+        for(MapItem mi : lmi) {
+//            Log.d(TAG, "clickCount "+mi.getId()+" "+
+//                    marker.getTag());
+            if(mi.getId().equals(marker.getTag())) {
+                Picasso.get().load(mi.getImages().get(0)).into(sh.getI0());
+                sh.setVisibility(View.VISIBLE);
+                sh.fill(mi.getSiteName(), mi.getCreator(),
+                        ""+mi.getSiteLocation().getLatitude()+", "+mi.getSiteLocation().getLongitude());
+            }
         }
 
         return false;
@@ -168,6 +181,7 @@ public class MapFragment extends Fragment implements
         mMap.setOnMarkerClickListener(this);
         mapready = true;
         googleMap = mMap;
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(20000), 1000, null);
         draw();
     }
 
