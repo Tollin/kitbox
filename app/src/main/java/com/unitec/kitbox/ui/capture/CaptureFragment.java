@@ -39,6 +39,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -91,7 +92,7 @@ public class CaptureFragment extends Fragment {
     private Classifier classifier;
 
     private Executor executor = Executors.newSingleThreadExecutor();
-
+    private Timestamp ExpireDate;
     // Views
     private TextView textViewResult;
     private Button btnDetectObject, btnSubmitItem;
@@ -446,8 +447,9 @@ public class CaptureFragment extends Fragment {
     private void uploadData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         Log.d(TAG, objectPicUrl);
+
         Date date = null;
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         try {
             date = format.parse(textViewExpiredDate.getText().toString());
         } catch (ParseException e) {
@@ -473,13 +475,15 @@ public class CaptureFragment extends Fragment {
         ShareItem item = new ShareItem();
         item.setName(textViewObject.getText().toString());
         item.setCount(Integer.valueOf(textViewObjectCount.getText().toString()));
-        item.setExpireDate(date);
+        ExpireDate = new Timestamp(date);
+        item.setExpireDate(ExpireDate);
         ArrayList<ShareItem> shareItems = new ArrayList<>();
         shareItems.add(item);
         site.setItems(shareItems);
 
+        Log.d(TAG, "textViewExpiredDate.getText().toString()");
         // Add a new document with a generated ID
-        db.collection("users")
+        db.collection("Sites")
                 .add(site)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
