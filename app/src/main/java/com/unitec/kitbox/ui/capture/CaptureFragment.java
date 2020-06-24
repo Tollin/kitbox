@@ -106,7 +106,7 @@ public class CaptureFragment extends Fragment {
     private TextView textViewObjectCount;
     private TextView textViewLongitude;
     private TextView textViewLatitude;
-
+    private TextView textViewLocationName;
 
     // DatePickerDialog
     private DatePickerDialog.OnDateSetListener mDateSetListener;
@@ -115,7 +115,7 @@ public class CaptureFragment extends Fragment {
     private LocationManager mLocationManager;
     private LocationListener mLocationListener;
     private LatLng mLatLng;
-    GeoPoint mGeoPoint;
+    private GeoPoint mGeoPoint;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Boolean mLocationPermissionGranted = false;
     private static final String fineLocationPermission = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -145,6 +145,7 @@ public class CaptureFragment extends Fragment {
         textViewObjectCount = root.findViewById(R.id.objectCountTextView);
         textViewLongitude = root.findViewById(R.id.longitudeTextView);
         textViewLatitude = root.findViewById(R.id.latitudeTextView);
+        textViewLocationName = root.findViewById(R.id.locationNameTextView);
 
         btnSubmitItem = root.findViewById(R.id.btnSubmitItem);
         btnDetectObject = root.findViewById(R.id.btnDetectObject);
@@ -461,20 +462,7 @@ public class CaptureFragment extends Fragment {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        
-        // Create a new user with a first and last name
-//        Map<String, Object> user = new HashMap<>();
-//          user.put("Test", "test");
-////          user.put("Test1", "test1");
-//        user.put("Creator", currentUser.getDisplayName());
-////        user.put("Images", objectPicUrl);
-//        user.put("Count", textViewObjectCount.getText());
-//        user.put("ExpireDate", textViewExpiredDate.getText());
-//        user.put("Name", textViewObject.getText().toString());
-//        user.put("LastUpdator", currentUser.getDisplayName());
-//        user.put("LocationName", textViewSiteName.getText().toString());
-////        user.put("SiteLocation", textViewLatitude.getText().toString()+","+textViewLongitude.getText().toString());
-//        user.put("SiteName", textViewSiteName.getText().toString());
+
         SiteModel site = new SiteModel();
         site.setCreator(currentUser.getDisplayName());
         ArrayList images = new ArrayList<String>();
@@ -487,6 +475,7 @@ public class CaptureFragment extends Fragment {
         item.setExpireDate(ExpireDate);
         site.setLastUpdator(currentUser.getDisplayName());
         site.setSiteLocation(mGeoPoint);
+        site.setLocationName(textViewLocationName.getText().toString());
         site.setSiteName(textViewSiteName.getText().toString());
         ArrayList<ShareItem> shareItems = new ArrayList<>();
         shareItems.add(item);

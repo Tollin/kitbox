@@ -171,7 +171,7 @@
 
         <EditText
             android:id="@+id/addressTextView"
-            android:layout_width="165dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
@@ -209,7 +209,7 @@
             android:inputType="text"/>
 
         <TextView
-            android:layout_width="45dp"
+            android:layout_width="52dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
@@ -230,6 +230,34 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center|top"
+        android:layout_marginTop="470dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:inputType="text"
+            android:text="Location : "
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/locationNameTextView"
+            android:layout_width="245dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:hint=" Please enter location Name."
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
 
 
