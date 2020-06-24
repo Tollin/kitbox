@@ -1,5 +1,7 @@
 package com.unitec.kitbox.models;
 
+import com.google.firebase.Timestamp;
+
 import java.util.Date;
 
 public class ShareItem {
@@ -17,11 +19,11 @@ public class ShareItem {
         Count = count;
     }
 
-    public Date getExpireDate() {
+    public Timestamp getExpireDate() {
         return ExpireDate;
     }
 
-    public void setExpireDate(Date expireDate) {
+    public void setExpireDate(Timestamp expireDate) {
         ExpireDate = expireDate;
     }
 
@@ -33,6 +35,6 @@ public class ShareItem {
         Name = name;
     }
 
-    private Date ExpireDate;
+    private Timestamp ExpireDate;
     private String Name;
 }

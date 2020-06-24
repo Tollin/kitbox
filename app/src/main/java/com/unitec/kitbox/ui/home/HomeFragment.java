@@ -94,7 +94,7 @@ public class HomeFragment extends CommonFragment implements View.OnClickListener
                                        ShareItem item = new ShareItem();
                                        item.setCount(Integer.parseInt(sharedItem.get(ShareItem.CountKey).toString()));
                                        item.setName(sharedItem.get(ShareItem.NameKey).toString());
-                                       item.setExpireDate(((Timestamp)sharedItem.get(ShareItem.ExpireDateKey)).toDate());
+                                       item.setExpireDate(((Timestamp)sharedItem.get(ShareItem.ExpireDateKey)));
                                        items.add(item);
                                    }
                                }

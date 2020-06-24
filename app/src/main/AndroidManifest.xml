@@ -2,7 +2,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.unitec.kitbox">
+
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!--  Allow the API to determine the location as accurately as possible through available location service providers
+     (including global positioning system (GPS)) and Wi-Fi and mobile data.  -->
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- The API check the connection status to determine whether the data can be downloaded. -->
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!--  Allow the API to use Wi-Fi or mobile data (or both) to determine the location of the device.
+     The location accuracy returned by the API is approximately in units of city blocks.  -->
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- Specified an older version of the Google Play Services SDK, you must require
+    android.permission.WRITE_EXTERNAL_STORAGE permission.   -->
+    
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
