@@ -61,13 +61,19 @@ import com.wonderkiln.camerakit.CameraKitVideo;
 import com.wonderkiln.camerakit.CameraView;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.zip.DataFormatException;
 
 import static android.content.Context.LOCATION_SERVICE;
 
@@ -318,8 +324,8 @@ public class CaptureFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Upload image to Firebase storage
-//                uploadImage();
-                uploadData();
+                uploadImage();
+
             }
         });
 
@@ -421,6 +427,8 @@ public class CaptureFragment extends Fragment {
 
                 objectPicUrl = String.valueOf(downloadUrl);
                 Log.d(TAG, objectPicUrl);
+                uploadData();
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -437,7 +445,15 @@ public class CaptureFragment extends Fragment {
 
     private void uploadData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        Log.d(TAG, objectPicUrl);
+        Log.d(TAG, objectPicUrl);
+        Date date = null;
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            date = format.parse(textViewExpiredDate.getText().toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        
         // Create a new user with a first and last name
 //        Map<String, Object> user = new HashMap<>();
 //          user.put("Test", "test");
@@ -453,11 +469,13 @@ public class CaptureFragment extends Fragment {
 //        user.put("SiteName", textViewSiteName.getText().toString());
         SiteModel site = new SiteModel();
         site.setSiteName(textViewSiteName.getText().toString());
+//        site.getImages(objectPicUrl.toString());
         ShareItem item = new ShareItem();
         item.setName(textViewObject.getText().toString());
-        item.setCount(Integer.parseInt(textViewObjectCount.getText().toString()));
-        ShareItem[] shareItems = new ShareItem[1];
-        shareItems[0] = item;
+        item.setCount(Integer.valueOf(textViewObjectCount.getText().toString()));
+        item.setExpireDate(date);
+        ArrayList<ShareItem> shareItems = new ArrayList<>();
+        shareItems.add(item);
         site.setItems(shareItems);
 
         // Add a new document with a generated ID
