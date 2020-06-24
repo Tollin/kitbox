@@ -55,6 +55,11 @@ public class MapFragment extends Fragment implements
     private  SupportMapFragment mapFragment;
     private TextView closeBtn;
     private show sh;
+    private String siteName ="";
+    private String lastUpdator ="";
+    private String creator = "";
+    private GeoPoint siteLocation = new GeoPoint(0, 0);
+    private String locationName = "";
 //    private TextView textView;
 //    private ImageView imageView;
     private String imageUrl;
@@ -62,7 +67,7 @@ public class MapFragment extends Fragment implements
         if(dbready && mapready) {
             for (MapItem mi : lmi) {
                 GeoPoint gp = mi.getSiteLocation();
-                Log.d(TAG,  " MapItem=> " + mi.getId());
+                Log.d(TAG,  " MapItem=> " + mi.getId()+" "+mi.getImages().get(0));
 //                Log.d(TAG,  " MapItem=> " + gp.getLatitude());
 //                Log.d(TAG,  " MapItem=> " + gp.getLongitude());
                 Double lat = 0.0;
@@ -129,15 +134,12 @@ public class MapFragment extends Fragment implements
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             dbready = true;
-                            String siteName ="";
-                            String lastUpdator ="";
-                            String creator = "";
-                            GeoPoint siteLocation = new GeoPoint(0, 0);
-                            String locationName = "";
-                            List<String> images = new ArrayList<String>();
-                            List<Item> items = new ArrayList<Item>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                List<String> images = new ArrayList<String>();
+                                List<Item> items = new ArrayList<Item>();
                                 try{
+                                    images.clear();
+                                    items.clear();
                                     List<HashMap<String, Object>> lhm = (List<HashMap<String, Object>> )document.getData().get("items");
                                     for(HashMap<String, Object> hm : lhm){
                                         items.add(new Item(hm));
@@ -187,9 +189,10 @@ public class MapFragment extends Fragment implements
 //        Log.d(TAG, "clickCount "+ clickCount+" "+
 //                marker.getTitle());
         for(MapItem mi : lmi) {
-//            Log.d(TAG, "clickCount "+mi.getId()+" "+
-//                    marker.getTag());
+            Log.d(TAG, "clickCount "+mi.getId()+" "+
+                    marker.getTag());
             if(mi.getId().equals(marker.getTag())) {
+                Log.d(TAG, "clickCount "+mi.getImages().get(0));
                 Picasso.get().load(mi.getImages().get(0)).into(sh.getI0());
                 sh.setVisibility(View.VISIBLE);
                 sh.fill(mi.getSiteName(), mi.getCreator(),

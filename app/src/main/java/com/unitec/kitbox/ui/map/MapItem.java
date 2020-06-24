@@ -1,5 +1,7 @@
 package com.unitec.kitbox.ui.map;
 
+import android.util.Log;
+
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.ArrayList;
@@ -8,6 +10,7 @@ import java.util.List;
 
 public class MapItem {
 
+    private static final String TAG = "kitbox";
     public String getSiteName() {
         return SiteName;
     }
@@ -91,6 +94,7 @@ public class MapItem {
         this.id = id;
         this.Images = new ArrayList<String>();
         for (String s : Images) {
+//            Log.d(TAG, id + " MapItemInner=> " + s);
             this.Images.add(s);
         }
         this.Items = new ArrayList<Item>();
