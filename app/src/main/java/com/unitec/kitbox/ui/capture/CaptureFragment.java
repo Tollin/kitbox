@@ -471,7 +471,9 @@ public class CaptureFragment extends Fragment {
 //        user.put("SiteName", textViewSiteName.getText().toString());
         SiteModel site = new SiteModel();
         site.setCreator(currentUser.getDisplayName());
-//        site.setImages(objectPicUrl.toString());
+        ArrayList images = new ArrayList<String>();
+        images.add(objectPicUrl.toString());
+        site.setImages(images);
         ShareItem item = new ShareItem();
         item.setName(textViewObject.getText().toString());
         item.setCount(Integer.valueOf(textViewObjectCount.getText().toString()));
