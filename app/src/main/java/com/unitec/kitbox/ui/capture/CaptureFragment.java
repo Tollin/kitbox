@@ -51,6 +51,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.unitec.kitbox.MainActivity;
 import com.unitec.kitbox.R;
+import com.unitec.kitbox.common.CommonFragment;
 import com.unitec.kitbox.models.ShareItem;
 import com.unitec.kitbox.models.SiteModel;
 import com.unitec.kitbox.tensorflowlite.Classifier;
@@ -79,7 +80,7 @@ import java.util.zip.DataFormatException;
 
 import static android.content.Context.LOCATION_SERVICE;
 
-public class CaptureFragment extends Fragment {
+public class CaptureFragment extends CommonFragment {
 
     private static String TAG = "CaptureFragment";
 
@@ -490,6 +491,10 @@ public class CaptureFragment extends Fragment {
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                         toastMessage("Upload finished!");
+
+//                        Bundle bundle = new Bundle();
+//                        bundle.putString(TransferItemIdKey, documentReference.getId());
+//                        navController.navigate(R.id.nav_map, bundle);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

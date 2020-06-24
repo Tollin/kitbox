@@ -27,6 +27,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.unitec.kitbox.Adapter.HomeRecycleViewAdapter;
 import com.unitec.kitbox.R;
 import com.unitec.kitbox.common.CommonFragment;
+import com.unitec.kitbox.event.ItemClickEvent;
 import com.unitec.kitbox.models.ShareItem;
 import com.unitec.kitbox.models.SiteModel;
 
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-public class HomeFragment extends CommonFragment implements View.OnClickListener {
+public class HomeFragment extends CommonFragment implements View.OnClickListener, ItemClickEvent {
 
     private ImageButton imgBtnRefresh;
     private RecyclerView recyclerViewList;
@@ -63,6 +64,7 @@ public class HomeFragment extends CommonFragment implements View.OnClickListener
     }
 
     private void loadDataFromFirebase(){
+       final ItemClickEvent eventListener = this;
        SitesCollection
                .get()
                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -73,6 +75,7 @@ public class HomeFragment extends CommonFragment implements View.OnClickListener
                            for (QueryDocumentSnapshot document : task.getResult()) {
                                Log.i(LogTag, document.getString(SiteModel.CreatorKey));
                                 SiteModel site = new SiteModel();
+                                site.setSiteModelId(document.getId());
                                 site.setCreator(document.getString(SiteModel.CreatorKey));
                                 site.setLastUpdator(document.getString(SiteModel.LastUpdatorKey));
                                site.setLocationName(document.getString(SiteModel.LocationNameKey));
@@ -101,7 +104,7 @@ public class HomeFragment extends CommonFragment implements View.OnClickListener
                                sites.add(site);
                            }
 
-                           HomeRecycleViewAdapter adapter = new HomeRecycleViewAdapter(sites);
+                           HomeRecycleViewAdapter adapter = new HomeRecycleViewAdapter(sites, (ItemClickEvent) eventListener);
                            recyclerViewList.setAdapter(adapter);
                        } else {
                            Toast.makeText(getContext(), "faild to load data from server", Toast.LENGTH_LONG)
@@ -118,5 +121,12 @@ public class HomeFragment extends CommonFragment implements View.OnClickListener
     @Override
     public void onClick(View view) {
         loadDataFromFirebase();
+    }
+
+    @Override
+    public void siteClick(SiteModel site) {
+        Bundle bundle = new Bundle();
+        bundle.putString(TransferItemIdKey, site.getSiteModelId());
+        navController.navigate(R.id.nav_map, bundle);
     }
 }

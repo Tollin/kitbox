@@ -47,7 +47,6 @@ public class CardViewAdapter extends RecyclerView.ViewHolder{
         this.tvItemName = tvItemName;
     }
 
-
     public CardViewAdapter(@NonNull View itemView) {
         super(itemView);
         tvCreator = itemView.findViewById(R.id.tv_creator);
