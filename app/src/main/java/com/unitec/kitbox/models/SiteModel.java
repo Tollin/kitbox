@@ -21,6 +21,16 @@ public class SiteModel {
     private ArrayList<String> Images;
     private ArrayList<ShareItem> Items;
 
+    public String getSiteModelId() {
+        return SiteModelId;
+    }
+
+    public void setSiteModelId(String siteModelId) {
+        SiteModelId = siteModelId;
+    }
+
+    private String SiteModelId;
+
     public String getSiteName() {
         return SiteName;
     }

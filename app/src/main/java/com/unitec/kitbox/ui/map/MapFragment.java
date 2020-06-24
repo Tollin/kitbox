@@ -16,11 +16,14 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.fragment.app.FragmentActivity;
+
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,6 +34,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 import com.unitec.kitbox.R;
+import com.unitec.kitbox.common.CommonFragment;
 
 import java.io.IOException;
 import java.net.URL;
@@ -40,7 +44,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-public class MapFragment extends Fragment implements
+public class MapFragment extends CommonFragment implements
         GoogleMap.OnMarkerClickListener,
         OnMapReadyCallback {
     private boolean dbready;
@@ -60,16 +64,14 @@ public class MapFragment extends Fragment implements
     private String creator = "";
     private GeoPoint siteLocation = new GeoPoint(0, 0);
     private String locationName = "";
-//    private TextView textView;
-//    private ImageView imageView;
+    private String SelectedSiteId = "";
     private String imageUrl;
     public void draw () {
+        Marker selectItem = null;
         if(dbready && mapready) {
             for (MapItem mi : lmi) {
                 GeoPoint gp = mi.getSiteLocation();
                 Log.d(TAG,  " MapItem=> " + mi.getId()+" "+mi.getImages().get(0));
-//                Log.d(TAG,  " MapItem=> " + gp.getLatitude());
-//                Log.d(TAG,  " MapItem=> " + gp.getLongitude());
                 Double lat = 0.0;
                 Double lon = 0.0;
                 if (gp != null) {
@@ -83,12 +85,22 @@ public class MapFragment extends Fragment implements
                 Marker a = googleMap.addMarker(new MarkerOptions().position(myplce).title(mi.getSiteName()));
                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(myplce));
                 a.setTag(mi.getId());
-
+                if(SelectedSiteId != "" && SelectedSiteId.equals(mi.getId())){
+                    selectItem = a;
+                }
             }
 
 
         } else {
             return;
+        }
+        if(selectItem != null){
+            onMarkerClick(selectItem);
+            int padding = 15; // offset from edges of the map in pixels
+            CameraUpdate cu = CameraUpdateFactory.newLatLngZoom (selectItem.getPosition(), padding);
+
+            googleMap.moveCamera(cu);
+            googleMap.animateCamera(cu);
         }
     }
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -180,8 +192,13 @@ public class MapFragment extends Fragment implements
                         }
                     }
                 });
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            SelectedSiteId = bundle.getString(TransferItemIdKey);
+        }
         return root;
     }
+
 
     @Override
     public boolean onMarkerClick(Marker marker) {
