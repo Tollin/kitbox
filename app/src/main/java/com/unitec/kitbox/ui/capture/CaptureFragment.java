@@ -117,7 +117,7 @@ public class CaptureFragment extends Fragment {
     private StorageReference mStorageRef;
     private StorageReference imageRef;
     private static FirebaseUser currentUser;
-
+    private String objectPicUrl;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -316,7 +316,7 @@ public class CaptureFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Upload image to Firebase storage
-                uploadImage();
+//                uploadImage();
                 uploadData();
             }
         });
@@ -417,7 +417,7 @@ public class CaptureFragment extends Fragment {
                 while (!urlTask.isSuccessful());
                 Uri downloadUrl = urlTask.getResult();
 
-                final String objectPicUrl = String.valueOf(downloadUrl);
+                objectPicUrl = String.valueOf(downloadUrl);
                 Log.d(TAG, objectPicUrl);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -435,20 +435,29 @@ public class CaptureFragment extends Fragment {
 
     private void uploadData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+//        Log.d(TAG, objectPicUrl);
         // Create a new user with a first and last name
         Map<String, Object> user = new HashMap<>();
-        user.put("first", "Ada");
-        user.put("last", "Lovelace");
-        user.put("born", 1815);
+          user.put("Test", "test");
+//          user.put("Test1", "test1");
+        user.put("Creator", currentUser.getDisplayName());
+//        user.put("Images", objectPicUrl);
+        user.put("Count", textViewObjectCount.getText());
+        user.put("ExpireDate", textViewExpiredDate.getText());
+        user.put("Name", textViewObject.getText().toString());
+        user.put("LastUpdator", currentUser.getDisplayName());
+        user.put("LocationName", textViewSiteName.getText().toString());
+//        user.put("SiteLocation", textViewLatitude.getText().toString()+","+textViewLongitude.getText().toString());
+        user.put("SiteName", textViewSiteName.getText().toString());
 
         // Add a new document with a generated ID
-        db.collection("Sites")
+        db.collection("users")
                 .add(user)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + currentUser.getUid());
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                        toastMessage("Upload finished!");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
