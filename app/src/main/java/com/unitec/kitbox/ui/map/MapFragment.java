@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class MapFragment extends Fragment implements
         GoogleMap.OnMarkerClickListener,
@@ -62,9 +63,18 @@ public class MapFragment extends Fragment implements
             for (MapItem mi : lmi) {
                 GeoPoint gp = mi.getSiteLocation();
                 Log.d(TAG,  " MapItem=> " + mi.getId());
-                Log.d(TAG,  " MapItem=> " + gp.getLatitude());
-                Log.d(TAG,  " MapItem=> " + gp.getLongitude());
-                LatLng myplce = new LatLng(gp.getLatitude(), gp.getLongitude());
+//                Log.d(TAG,  " MapItem=> " + gp.getLatitude());
+//                Log.d(TAG,  " MapItem=> " + gp.getLongitude());
+                Double lat = 0.0;
+                Double lon = 0.0;
+                if (gp != null) {
+                    try{
+                        lat = gp.getLatitude();
+                        lon = gp.getLongitude();
+                    }catch(NullPointerException e){
+                    }
+                }
+                LatLng myplce = new LatLng(lat, lon );
                 Marker a = googleMap.addMarker(new MarkerOptions().position(myplce).title(mi.getSiteName()));
                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(myplce));
                 a.setTag(mi.getId());
@@ -119,33 +129,48 @@ public class MapFragment extends Fragment implements
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             dbready = true;
+                            String siteName ="";
+                            String lastUpdator ="";
+                            String creator = "";
+                            GeoPoint siteLocation = new GeoPoint(0, 0);
+                            String locationName = "";
+                            List<String> images = new ArrayList<String>();
+                            List<Item> items = new ArrayList<Item>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                List<Item> items = new ArrayList<Item>();
-                                List<HashMap<String, Object>> lhm = (List<HashMap<String, Object>> )document.getData().get("items");
-                                for(HashMap<String, Object> hm : lhm){
-                                    items.add(new Item(hm));
-                                }
-                                List<String> images = new ArrayList<String>();
-                                List<String> is = (ArrayList<String>)document.getData().get("images");
-                                for(String s : is){
-                                    images.add(s);
-                                }
+                                try{
+                                    List<HashMap<String, Object>> lhm = (List<HashMap<String, Object>> )document.getData().get("items");
+                                    for(HashMap<String, Object> hm : lhm){
+                                        items.add(new Item(hm));
+                                    }
+                                    List<String> is = (ArrayList<String>)document.getData().get("images");
+                                    for(String s : is){
+                                        images.add(s);
+                                    }
+                                    siteName = (String)document.getData().get("siteName");
+                                    lastUpdator = (String)document.getData().get("lastUpdator");
+                                    creator = (String)document.getData().get("creator");
+                                    siteLocation =(GeoPoint)document.getData().get("siteLocation");
+                                    locationName = (String)document.getData().get("locationName");
 //                                Log.d(TAG, document.getId() + " lhm=> " + items.get(0).getName());
-                                MapItem mi = new MapItem((String)document.getId(),
-                                        (String)document.getData().get("siteName"),
-                                        images,
-                                        (String)document.getData().get("lastUpdator"),
-                                        items,
-                                        (String)document.getData().get("creator"),
-                                        (GeoPoint)document.getData().get("siteLocation"),
-                                        (String)document.getData().get("locationName"));
-                                lmi.add(mi);
 //                                Log.d(TAG, document.getId() + " values=> " + document.getData().values());
 //                                Log.d(TAG, document.getId() + " keys=> " + document.getData().keySet());
 
-                                Log.d(TAG, document.getId() + " Images=> " + images.get(0));
+                                    Log.d(TAG, document.getId() + " Images=> " + images.get(0));
 //                                Log.d(TAG, document.getId() + " Images=> " + document.getData().get("Images"));
 //                                Log.d(TAG, document.getId() + " SiteName=> " + document.getData().get("SiteName"));
+                                }catch(NullPointerException e){
+                                }
+
+                                MapItem mi = new MapItem((String)document.getId(),
+                                        siteName,
+                                        images,
+                                        lastUpdator,
+                                        items,
+                                        creator,
+                                        siteLocation,
+                                        locationName);
+                                lmi.add(mi);
+
                             }
                             draw();
                         } else {
