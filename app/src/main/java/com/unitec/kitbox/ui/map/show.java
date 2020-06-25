@@ -9,9 +9,11 @@ import android.widget.ScrollView;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.unitec.kitbox.R;
 
-public class show extends ScrollView {
+public class show extends ConstraintLayout {
 
     public TextView getT0() {
         return t0;
