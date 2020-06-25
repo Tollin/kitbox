@@ -491,10 +491,6 @@ public class CaptureFragment extends CommonFragment {
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                         toastMessage("Upload finished!");
-
-//                        Bundle bundle = new Bundle();
-//                        bundle.putString(TransferItemIdKey, documentReference.getId());
-//                        navController.navigate(R.id.nav_map, bundle);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
