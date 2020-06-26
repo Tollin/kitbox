@@ -107,7 +107,7 @@ public class CaptureFragment extends CommonFragment {
     private TextView textViewObjectCount;
     private TextView textViewLongitude;
     private TextView textViewLatitude;
-    private TextView textViewLocationName;
+
 
     // DatePickerDialog
     private DatePickerDialog.OnDateSetListener mDateSetListener;
@@ -146,7 +146,7 @@ public class CaptureFragment extends CommonFragment {
         textViewObjectCount = root.findViewById(R.id.objectCountTextView);
         textViewLongitude = root.findViewById(R.id.longitudeTextView);
         textViewLatitude = root.findViewById(R.id.latitudeTextView);
-        textViewLocationName = root.findViewById(R.id.locationNameTextView);
+
 
         btnSubmitItem = root.findViewById(R.id.btnSubmitItem);
         btnDetectObject = root.findViewById(R.id.btnDetectObject);
@@ -476,7 +476,7 @@ public class CaptureFragment extends CommonFragment {
         item.setExpireDate(ExpireDate);
         site.setLastUpdator(currentUser.getDisplayName());
         site.setSiteLocation(mGeoPoint);
-        site.setLocationName(textViewLocationName.getText().toString());
+        site.setLocationName(textViewAddress.getText().toString());
         site.setSiteName(textViewSiteName.getText().toString());
         ArrayList<ShareItem> shareItems = new ArrayList<>();
         shareItems.add(item);
